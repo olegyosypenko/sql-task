@@ -1,3 +1,20 @@
 1.
 
 SELECT COUNT(t.n_id) AS SUM FROM (SELECT * FROM news UNION SELECT * FROM reviews) t
+
+2.
+
+SELECT t.nc_name, t.L AS 'COUNT(news.n_id)' FROM(
+SELECT nc_id, nc_name, COUNT(news.n_id) AS L FROM news_categories
+LEFT JOIN
+news
+ON news.n_category = news_categories.nc_id
+WHERE news.n_category > 0
+GROUP BY news.n_category
+UNION
+SELECT nc_id, nc_name, 0 FROM news_categories
+LEFT JOIN
+news
+ON news.n_category = news_categories.nc_id
+WHERE news.n_category IS NULL) t
+ORDER BY t.nc_id
