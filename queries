@@ -4,6 +4,13 @@ SELECT COUNT(t.n_id) AS SUM FROM (SELECT * FROM news UNION SELECT * FROM reviews
 
 2.
 
+SELECT nc_name, COUNT(news.n_id) FROM news_categories
+LEFT JOIN
+news
+ON news.n_category = news_categories.nc_id
+GROUP BY news_categories.nc_name
+ORDER BY news_categories.nc_id
+
 SELECT t.nc_name, t.L AS 'COUNT(news.n_id)' FROM(
 SELECT nc_id, nc_name, COUNT(news.n_id) AS L FROM news_categories
 LEFT JOIN
@@ -18,3 +25,23 @@ news
 ON news.n_category = news_categories.nc_id
 WHERE news.n_category IS NULL) t
 ORDER BY t.nc_id
+
+3.
+
+SELECT rc_name, COUNT(r_id) FROM reviews_categories
+LEFT JOIN reviews
+ON reviews.r_category = reviews_categories.rc_id
+GROUP BY rc_name
+
+4.
+SELECT category_name, last_date FROM (
+SELECT 0 AS id, rc_name AS category_name, MAX(r_dt) AS last_date FROM reviews_categories
+INNER JOIN reviews
+ON reviews.r_category = reviews_categories.rc_id
+GROUP BY rc_name
+UNION
+SELECT nc_id AS id, nc_name AS category_name, MAX(n_dt) AS last_date FROM news_categories
+INNER JOIN news
+ON news.n_category = news_categories.nc_id
+GROUP BY nc_name
+ORDER BY id) t
