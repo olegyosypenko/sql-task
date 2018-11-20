@@ -127,3 +127,36 @@ SELECT n_header, n_dt FROM news
 JOIN news_categories ON news.n_category = news_categories.nc_id
 WHERE news_categories.nc_name = 'Логистика'
 AND YEAR(n_dt) = 2012
+
+16.
+SELECT YEAR(n_dt) year, COUNT(*) FROM news
+GROUP BY year
+
+17.
+SELECT b_url, b_id FROM banners
+WHERE b_url IN 
+	(SELECT t.b_url FROM 
+     	(SELECT b_url, count(b_id) as c FROM banners
+       GROUP BY b_url) 
+   t WHERE c > 1)
+   
+18.
+SELECT pages.p_name, banners.b_id, banners.b_url FROM banners 
+JOIN m2m_banners_pages ON banners.b_id = m2m_banners_pages.b_id
+JOIN pages USING(p_id) 
+WHERE pages.p_parent = (SELECT p_id FROM pages WHERE p_name='Юридическим лицам')
+
+19.
+SELECT b_id, b_url, b_click/b_show AS rate FROM banners
+WHERE b_pic IS NOT NULL
+ORDER BY rate DESC;
+
+20.
+SELECT n_header header, n_dt as 'date'
+FROM news
+UNION
+SELECT r_header header, r_dt as 'date'
+FROM reviews  
+ORDER BY `date`  ASC
+LIMIT 1
+
