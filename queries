@@ -51,3 +51,10 @@ SELECT pages.p_name, banners.b_id, banners.b_url FROM pages
 JOIN m2m_banners_pages ON pages.p_id = m2m_banners_pages.p_id
 JOIN banners ON m2m_banners_pages.b_id = banners.b_id
 WHERE p_parent IS NULL
+
+6.
+SELECT pages.p_name FROM pages 
+JOIN m2m_banners_pages ON pages.p_id = m2m_banners_pages.p_id
+JOIN banners ON m2m_banners_pages.b_id = banners.b_id
+GROUP BY pages.p_name
+ORDER BY pages.p_id
