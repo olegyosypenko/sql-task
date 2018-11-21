@@ -160,3 +160,38 @@ FROM reviews
 ORDER BY `date`  ASC
 LIMIT 1
 
+21.
+SELECT b_url, b_id FROM banners
+WHERE b_url IN 
+    (SELECT t.b_url FROM 
+     	(SELECT b_url, count(b_id) as c FROM banners
+         GROUP BY b_url) t
+     WHERE c = 1)
+    
+22.
+SELECT p_name, COUNT(b_id) banners_count FROM banners
+JOIN m2m_banners_pages USING(b_id)
+JOIN pages USING(p_id)
+GROUP BY pages.p_name
+ORDER BY banners_count DESC, p_name ASC
+
+23.
+(SELECT n_header header, n_dt 'date' FROM news
+ORDER BY 'date' DESC
+LIMIT 1)
+UNION
+(SELECT r_header header, r_dt 'date' FROM reviews
+ORDER BY 'date' DESC
+LIMIT 1)
+
+24.
+SELECT b_id, b_url, b_text FROM banners
+WHERE LOCATE(b_text, b_url) > 0
+AND length(b_text) > 0
+
+25.
+SELECT p_name FROM pages
+JOIN m2m_banners_pages USING(p_id)
+JOIN banners USING(b_id)
+ORDER BY banners.b_click/banners.b_show
+LIMIT 1
