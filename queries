@@ -135,10 +135,9 @@ GROUP BY year
 17.
 SELECT b_url, b_id FROM banners
 WHERE b_url IN 
-	(SELECT t.b_url FROM 
-     	(SELECT b_url, count(b_id) as c FROM banners
-       GROUP BY b_url) 
-   t WHERE c > 1)
+	(SELECT b_url FROM banners
+	 GROUP BY b_url
+	 HAVING COUNT(b_url) > 1)
    
 18.
 SELECT pages.p_name, banners.b_id, banners.b_url FROM banners 
@@ -162,11 +161,9 @@ LIMIT 1
 
 21.
 SELECT b_url, b_id FROM banners
-WHERE b_url IN 
-    (SELECT t.b_url FROM 
-     	(SELECT b_url, count(b_id) as c FROM banners
-         GROUP BY b_url) t
-     WHERE c = 1)
+GROUP BY b_url
+HAVING count(b_id) = 1
+ORDER BY b_id
     
 22.
 SELECT p_name, COUNT(b_id) banners_count FROM banners
