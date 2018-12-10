@@ -10,22 +10,6 @@ news
 ON news.n_category = news_categories.nc_id
 GROUP BY news_categories.nc_name
 ORDER BY news_categories.nc_id
-
-SELECT t.nc_name, t.L AS 'COUNT(news.n_id)' FROM(
-SELECT nc_id, nc_name, COUNT(news.n_id) AS L FROM news_categories
-LEFT JOIN
-news
-ON news.n_category = news_categories.nc_id
-WHERE news.n_category > 0
-GROUP BY news.n_category
-UNION
-SELECT nc_id, nc_name, 0 FROM news_categories
-LEFT JOIN
-news
-ON news.n_category = news_categories.nc_id
-WHERE news.n_category IS NULL) t
-ORDER BY t.nc_id
-
 3.
 
 SELECT rc_name, COUNT(r_id) FROM reviews_categories
